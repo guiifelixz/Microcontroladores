@@ -14,8 +14,10 @@ R- São sitemas que contam com memória, processador, interface de entrada e sa�
 	selecionar e medir o tempo em que o forno deve ficar acionado e emitir um sinal quando a tarefa for concluída. 
 	(c) Para automação industrial.
 	Acionamentos Elétricos a partir do Soft-Start, que uma de suas funções é dar a partida do motor suavemente.
+	
 4. Cite arquiteturas possíveis e as diferenças entre elas.
-R-
+R- Risc e Cisc. Risc possui tipos de dados com pouca variedade, formato das instruções com poucos endereços, acesso aos dados via registradores.
+Ja na arquitetura Cisc possui tipo de dados com muita variedade, formato das instruções com muitos endereços e acesso de dados via memória.
 
 5. Por que usamos o MSP430 na disciplina, ao invés de outro microcontrolador?
 R- Pois o MSP430 é um microcontrolador utilizado no ramo profissional.
