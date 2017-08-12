@@ -1,0 +1,45 @@
+1- Quais as diferenças entre os barramentos de dados e de endereços?
+R - Barramento de dados transmite dados paralelamente entre as unidades. 
+Barramento de endereço é usado para selecionar a origem ou destino de sinais transmitidos num dos outros barramentos ou numa de suas linhas.
+Ele conduz endereços. Uma função típica do Barramento de Endereço é selecionar um registrador num dos dispositivos do sistema que é usado 
+como a fonte ou o destino do dado. 
+
+2- Quais são as diferenças entre as memórias RAM e ROM?
+R- RAM (Random Acess Memory): a memória de aceso aleatório, a memória RAM perde os dados que estão sendo processados quando o computador é 
+desligado, sendo chamada de memória volátil.
+Já na ROM (Read only memory) : a memória faz apenas leituras. Quando um dado é gravado na memória ROM, o dado não pode ser alterado.
+Geralmente são impressos em placa mesmo, o que impossibilita a reprogramação dos dados.
+
+3- Para o código, responda: (a) A variável i é armazenada na memória RAM ou ROM? Por quê? 
+R- É armazenada na memória RAM, pois após o termino do programa essa variável será esquecida.
+(b) O programa compilado a partir deste código é armazenado na memória RAM ou ROM? Por quê?
+R- É armazenado na memória ROM, pois será possível utilizar o código posteriormente, já que estará salvo.
+
+4-Quais são as diferenças, vantagens e desvantagens das arquiteturas Harvard e Von Neumann?
+  A Arquitetura de von Neumann (de John von Neumann), é uma arquitetura de computador que se caracteriza pela possibilidade de uma máquina 
+digital armazenar seus programas no mesmo espaço de memória que os dados, podendo assim manipular tais programas.
+  A Arquitetura de Harvard baseia-se em um conceito mais recente que a de Von-Neumann, tendo vindo da necessidade de por o microcontrolador 
+para trabalhar mais rápido. É uma arquitetura de computador que se distingue das outras por possuir duas memórias diferentes e independentes 
+em termos de barramento e ligação ao processador.
+  A principal vantagem desta arquitectura é dada pela dupla ligação às memórias de dados e programa (código), permitindo assim que o processador 
+leia uma instrução ao mesmo tempo que faz um acesso à memória de dados.
+  Nessas distintas arquiteturas, temos vantagens e desvantagens. Arquitetura tipo Harvard: Caminhos de dados e de instrução distintos, dessa 
+forma, seus componentes internos têm a seguinte disposição.
+  Já na arquitetura Von-Neumann, é processada uma única informação por vez, visto que nessa tecnologia, execução e dados percorrem o mesmo
+barramento, o que torna o processo lento em relação à arquitetura Harvard.
+
+5- Considere a variável inteira i, armazenando o valor 0x8051ABCD. Se i é armazenada na memória a partir do endereço 0x0200, como ficam este
+byte e os seguintes, considerando que a memória é: 
+(a) Little-endian; 
+0x 80 51 AB CD
+(b) Big-endian.
+0x DC BA 15 08
+
+6- Sabendo que o processador do MSP430 tem registradores de 16 bits, como ele soma duas variáveis de 32 bits?
+É necessário 4 registradores, separando a variável de 32 bits em dois registradores, os outros dois registradores é feito a mesma coisa só
+que para a outra variável. Com isso soma-se as variáveis com os bits menos significativos e guarda-se o carry paraentrar na soma dos bits
+mais significativos das variáveis.
+
+
+
+
