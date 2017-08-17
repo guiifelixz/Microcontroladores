@@ -40,7 +40,7 @@
 		P1OUT = 0 ;
 		for (;;)
 		{
-			se (P1IN & BTN == 0 ) // Botão pressionado
+			if (P1IN & BTN == 0 ) // Botão pressionado
 			{
 				P1OUT | = LED1 + LED2;
 				P1OUT & = ~ (LED1 + LED2); // 1 vez
@@ -64,3 +64,58 @@ anular  Pisca2 ()
 		P1OUT & = ~ (LED1 + LED2); // 2 vezes
 	}
   
+5. # Include  < msp430g2553.h >
+	# Define  LED1 BIT0
+	# Define  LED2 BIT6
+	
+	Pisca2 ()
+	{
+		P1OUT | = LED1 + LED2;
+		P1OUT & = ~ (LED1 + LED2); // 1 vez
+		
+		P1OUT | = LED1 + LED2;
+		P1OUT & = ~ (LED1 + LED2); // 2 vezes
+	}
+	
+	Void  main ( void )
+	{
+		WDTCTL = WDTPW | WDTHOLD;
+		P1DIR = LED1 + LED2;
+		P1OUT = 0 ;
+		for (;;)
+		{
+			Pisca2 ();
+		}
+	};
+
+6. # Include  < msp430g2553.h >
+	# Define  BTN BIT2
+	# Define  LED1 BIT0
+	# Define  LED2 BIT6
+	
+	Pisca2 ()
+	{
+		P1OUT | = LED1 + LED2;
+		P1OUT & = ~ (LED1 + LED2); // 1 vez
+		
+		P1OUT | = LED1 + LED2;
+		P1OUT & = ~ (LED1 + LED2); // 2 vezes
+	}
+	
+	Void  main ( void )
+	{
+		WDTCTL = WDTPW | WDTHOLD;
+		P1DIR = LED1 + LED2;
+		P1OUT = 0 ;
+		for (;;)
+		{
+			if (P1IN & BTN == 0 ) // Botão pressionado
+			{
+				Pisca2 ();
+				
+				while (P1IN & BTN == 0 ) {} // Aguardar o botão para ser pressionado para continuar.
+			}
+			
+				P1OUT & = ~ (LED1 + LED2); // Apagar os leds
+		}
+	};
