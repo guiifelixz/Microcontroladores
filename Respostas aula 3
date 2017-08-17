@@ -1,0 +1,66 @@
+1 - (a) Somente setar o bit menos significativo de a. 
+    R- a | = BIT0
+	(b) Somente setar dois bits de 'a': o menos significativo e o segundo menos significativo.
+		R- a | = 0x03
+	(c) Somente zerar o terceiro bit menos significativo de 'a'.
+		R- a &= 0x0B
+	(d) Somente zerar o terceiro e o quarto bits menos significativo de 'a'.
+		R- a & = 0x03
+	(e) Somente inverter o bit mais significativo de 'a'.
+		R- a ^ = 0x80
+	(f) Inverter o nibble mais significativo de 'a', e setar o nibble menos significativo de 'a'. 
+		R- a ^ = 0xF0
+		   a | = 0x0F
+    
+2- # Include  < msp430g2553.h >
+	# Define  LED1 BIT0
+	# Define  LED2 BIT6
+	
+	Void  main ( void )
+	{
+		WDTCTL = WDTPW | WDTHOLD;
+		P1DIR = LED1 + LED2;
+		P1OUT = 0 ;
+		for(;;)
+		{
+			P1OUT | = LED1 + LED2;
+			P1OUT & = ~ (LED1 + LED2);
+		}
+	};
+
+3- # Include  < msp430g2553.h >
+	# Define  BTN BIT2
+	# Define  LED1 BIT0
+	# Define  LED2 BIT6
+	
+	Void  main ( void )
+	{
+		WDTCTL = WDTPW | WDTHOLD;
+		P1DIR = LED1 + LED2;
+		P1OUT = 0 ;
+		for (;;)
+		{
+			se (P1IN & BTN == 0 ) // Botão pressionado
+			{
+				P1OUT | = LED1 + LED2;
+				P1OUT & = ~ (LED1 + LED2); // 1 vez
+				
+				P1OUT | = LED1 + LED2;
+				P1OUT & = ~ (LED1 + LED2); // 2 vezes
+				
+				while (P1IN & BTN == 0 ) {} // Aguardar o botão para ser pressionado para continuar.
+			}
+				P1OUT & = ~ (LED1 + LED2); // Apagar os leds
+		}
+	};
+  
+4. Considerando a placa Launchpad do MSP430, faça uma função em C que pisca os dois LEDs uma vez.
+anular  Pisca2 ()
+	{
+		P1OUT | = LED1 + LED2;
+		P1OUT & = ~ (LED1 + LED2); // 1 vez
+		
+		P1OUT | = LED1 + LED2;
+		P1OUT & = ~ (LED1 + LED2); // 2 vezes
+	}
+  
