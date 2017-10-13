@@ -1,0 +1,320 @@
+4. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão anterior. Acenda os 
+LEDs de forma que um ser humano veja todos acesos ao mesmo tempo.
+
+#define IN_OUT_OUT 0x03 // P1.2 IN/ P1.1 OUT/ P1.0 OUT
+#define OUT_IN_OUT 0x05
+#define OUT_OUT_IN 0x06
+#define GND_GND_VCC 0x01
+#define GND_VCC_GND 0x02
+#define VCC_GND_GND 0x04
+
+void main(void){
+WDTCTL = WDTPW + WDTHOLD;   // Stop WDT
+P1OUT = 0;
+
+	while(1){
+P1DIR = IN_OUT_OUT;
+P1OUT = GND_GND_VCC;
+P1OUT = GND_VCC_GND; // Liga Leds 1 e 2;
+
+P1DIR = OUT_OUT_IN;
+P1OUT = VCC_GND_GND;
+P1OUT = GND_VCC_GND; // Liga Leds 3 e 4
+
+P1DIR = OUT_IN_OUT;
+P1OUT = VCC_GND_GND;
+P1OUT = GND_GND_VCC; // Liga Leds 5 e 6
+	}
+}
+5. Defina a função void main(void){} para controlar 6 LEDs de uma árvore de natal usando o hardware da questão 3. Acenda os LEDs de 
+forma que um ser humano veja os LEDs L1 e L2 acesos juntos por um tempo, depois os LEDs L3 e L4 juntos, e depois os LEDs L5 e L6 juntos.
+
+#define IN_OUT_OUT 0x03 // P1.2 IN/ P1.1 OUT/ P1.0 OUT
+#define OUT_IN_OUT 0x05
+#define OUT_OUT_IN 0x06
+#define GND_GND_VCC 0x01
+#define GND_VCC_GND 0x02
+#define VCC_GND_GND 0x04
+
+  Pisca_1_2(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0){
+    P1OUT = GND_GND_VCC;
+    P1OUT = GND_VCC_GND;
+    }
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+  Pisca_3_4(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0){
+    P1OUT = VCC_GND_GND;
+    P1OUT = GND_VCC_GND;
+    }
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+  Pisca_5_6(volatile unsigned int x){
+  
+    while(x>0){
+    while((TA0CTL & TAIFG)==0){
+    P1OUT = VCC_GND_GND;
+    P1OUT = GND_GND_VCC
+    }
+    x--;
+    TA0CTL &= ~TAIFG;
+    }
+}
+
+void main (void){
+
+WDTCTL = WDTPW + WDTHOLD;   // Stop WDT
+
+BCSCTL1 = CALBC1_1MHZ;		//MCLK e SMCLK @ 1MHz
+DCOCTL = CALDCO_1MHZ;
+TA0CCR0 = 1000-1;
+TA0CTL = TASSEL_2 + ID_0 + MC_1;
+P1OUT = 0;
+
+while(1){
+	P1DIR = IN_OUT_OUT;
+	Pisca_1_2(1000);
+	
+	P1DIR = OUT_OUT_IN;
+	Pisca_3_4(1000);
+	
+	P1DIR = OUT_IN_OUT;
+	Pisca_4_5(1000);
+	}
+}
+
+6. Defina a função void EscreveDigito(volatile char dig); que escreve um dos dígitos 0x0-0xF em um único display de 7 segmentos via 
+porta P1, baseado na figura abaixo. Considere que em outra parte do código os pinos P1.0-P1.6 já foram configurados para corresponderem 
+aos LEDs A-G, e que estes LEDs possuem resistores externos para limitar a corrente.
+
+7. Multiplexe 2 displays de 7 segmentos para apresentar a seguinte sequência em loop:
+	00 - 11 - 22 - 33 - 44 - 55 - 66 - 77 - 88 - 99 - AA - BB - CC - DD - EE - FF
+
+#include <msp430.h> 
+#define LEDA BIT0
+#define LEDB BIT1
+#define LEDC BIT2
+#define LEDD BIT3
+#define LEDE BIT4
+#define LEDF BIT5
+#define LEDG BIT6
+#define CT1 BIT7 
+#define CT2 BIT0 
+/*
+ * main.c
+ */
+
+void EscreveDigito(volatile char dig)
+{
+    if(dig=='0')
+    {
+    //Digito 0
+    //LEDA = 1, LEDB = 1, LEDC = 1, LEDD = 1, LEDE = 1, LEDF = 1 e LEDG = 0
+    P1OUT |= LEDA + LEDB + LEDC + LEDD + LEDE + LEDF;
+    }
+    else if(dig=='1')
+    {
+    //Digito 1
+    //LEDA = 0, LEDB = 1, LEDC = 1, LEDD = 0, LEDE = 0, LEDF = 0 E LEDG = 0
+    P1OUT |= LEDB + LEDC;
+    }
+    else if(dig=='2')
+    {
+    //Digito 2
+    //LEDA = 1, LEDB = 1, LEDC = 0, LEDD = 1, LEDE = 1, LEDF = 0 E LEDG = 1
+    P1OUT |= LEDA + LEDB + LEDE + LEDG;
+    }
+    else if(dig=='3')
+    {
+    //Digito 3
+    //LEDA = 1, LEDB = 1, LEDC = 1, LEDD = 1, LEDE = 0, LEDF = 0 E LEDG = 1
+    P1OUT |= LEDA + LEDB + LEDC + LEDD + LEDG;
+    }
+    else if(dig=='4')
+    {
+    //Digito 4
+    //LEDA = 0, LEDB = 1, LEDC = 1, LEDD = 0, LEDE = 0, LEDF = 1 E LEDG = 1
+    P1OUT |= LEDB + LEDC + LEDG;
+    }
+    else if(dig=='5')
+    {//LEDA = 0, LEDB = 0, LEDC = 0, LEDD = 0, LEDE = 0, LEDF = 0 E LEDG = 0
+     //Digito 5
+     //LEDA = 1, LEDB = 0, LEDC = 1, LEDD = 1, LEDE = 0, LEDF = 1 E LEDG = 1
+     P1OUT |= LEDA + LEDC + LEDD + LEDF + LEDG;
+    }
+    else if(dig=='6')
+    {//LEDA = 1, LEDB = 0, LEDC = 1, LEDD = 1, LEDE = 1, LEDF = 1 E LEDG = 1
+     //Digito 6
+     P1OUT |= LEDA + LEDC + LEDD + LEDE + LEDF + LEDG;
+    }
+    else if(dig=='7')
+    {//LEDA = 1, LEDB = 1, LEDC = 1, LEDD = 0, LEDE = 0, LEDF = 0 E LEDG = 0
+     P1OUT |= LEDA + LEDC + LEDC;
+    }
+    else if(dig=='8')
+    {//LEDA = 1, LEDB = 1, LEDC = 1, LEDD = 1, LEDE = 1, LEDF = 1 E LEDG = 1
+     P1OUT |= LEDA + LEDB + LEDC + LEDD + LEDE + LEDF + LEDG;
+    }
+    else if(dig=='9')
+    {//LEDA = 1, LEDB = 1, LEDC = 1, LEDD = 1, LEDE = 0, LEDF = 1 E LEDG = 1
+     P1OUT |= LEDA + LEDB + LEDC + LEDD + LEDF + LEDG;
+    }
+    else if(dig=='A')
+    {//LEDA = 1, LEDB = 1, LEDC = 1, LEDD = 0, LEDE = 1, LEDF = 1 E LEDG = 1
+     P1OUT |= LEDA + LEDB + LEDC + LEDE + LEDF + LEDG;
+    }
+    else if(dig=='B')
+    {//LEDA = 0, LEDB = 0, LEDC = 1, LEDD = 1, LEDE = 1, LEDF = 1 E LEDG = 1
+     P1OUT = LEDC + LEDD + LEDE + LEDF + LEDG;
+    }
+    else if(dig=='C')
+    {//LEDA = 1, LEDB = 0, LEDC = 0, LEDD = 1, LEDE = 1, LEDF = 1 e LEDG = 0
+     P1OUT = LEDA + LEDD + LEDE + LEDF;
+    }
+    else if(dig=='D')
+    {//LEDA = 0, LEDB = 1, LEDC = 1, LEDD = 1, LEDE = 1, LEDF = 0 e LEDG = 1
+     P1OUT = LEDB + LEDC + LEDD + LEDE + LEDG;
+    }
+    else if(dig=='E')
+    {//LEDA = 1, LEDB = 0, LEDC = 0, LEDD = 1, LEDE = 1, LEDF = 1 e LEDG = 1
+     P1OUT = LEDA + LEDD + LEDE + LEDF + LEDG;
+    }
+    else if(dig=='F')
+    {//LEDA = 1, LEDB = 0, LEDC = 0, LEDD = 0, LEDE = 1, LEDF = 1 e LEDG = 1
+     P1OUT = LEDA + LEDE + LEDF + LEDG;
+    }
+}
+int main(void) {
+    WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
+    volatile int i;
+    P1DIR |= LEDA + LEDB + LEDC + LEDD + LEDE + LEDF + LEDG + CT1;
+    P2DIR |= CT2;
+    P1OUT = 0;
+    P2OUT = 0;
+	for(;;)
+	{
+	    
+	    for(i=0x30; i<=0x39; i++)
+	    {
+	        EscreveDigito(i);
+	        P1OUT ^= CT1;
+	        P1OUT ^= CT1;
+	        P2OUT ^= CT2;
+	        P2OUT ^= CT2;
+	    }
+	    for(i=0x41; i<=0x46; i++)
+	    {
+	        EscreveDigito(i);
+	        P1OUT ^= CT1;
+	        P1OUT ^= CT1;
+	        P2OUT ^= CT2;
+	        P2OUT ^= CT2;
+	    }
+	}
+	return 0;
+}
+
+
+
+
+-------------------------------------------------------------------------------------
+#include <msp430g2553.h>
+
+#define CHPx1 BIT0
+#define CHPx2 BIT1
+#define CHPx3 BIT2
+#define CHPxS (CHPx1 + CHPx2 + CHPx3)
+#define CHPx_CLR P1OUT &= ~CHPxS
+
+void Charlie_ON (char CHPx_OUT, char CHPx_ON){
+	P1OUT &= ~CHPxS;
+	P1DIR &= ~CHPxS;
+	P1DIR |= CHPx_OUT;
+	P1OUT |= CHPx_ON;
+}
+int main(void){
+
+	WDTCTL = WDTPW|WDTHOLD;
+	
+	while(1){
+
+	Charlie_ON(CHPx1 + CHPx2,CHPx1);
+	Charlie_ON(CHPx1 + CHPx2,CHPx2);
+
+	Charlie_ON(CHPx2 + CHPx3,CHPx2);
+	Charlie_ON(CHPx2 + CHPx3,CHPx3);
+
+	Charlie_ON(CHPx1 + CHPx3,CHPx1);
+	Charlie_ON(CHPx1 + CHPx3,CHPx3); // Metodo mais eficiente
+
+	//P1DIR = CHPx1 + CHPx2;
+	//P1OUT = CHPx1;
+	//P1OUT = CHPx2;
+
+	//P1DIR = CHPx2 + CHPx3;
+	//P1OUT = CHPx2;
+	//P1OUT = CHPx3;
+
+	//P1DIR = CHPx1 + CHPx3;
+	//P1OUT = CHPx1;
+	//P1OUT = CHPx3;		//Forma mais direta
+	}
+}
+
+---------------------------------------------------------------------------------------
+int main(void){
+	
+	char out[]={CHPx1 + CHPx2, CHPx1 + CHPx2, CHPx2 + CHPx3, CHPx2 + CHPx3, CHPx1 + CHPx3,
+		    CHPx1 + CHPx3};
+	
+	char ons[]={CHPx1, CHPx2, CHPx2, CHPx3, CHPx1, CHPx3};	
+
+	char e;
+	WDTCTL = WDTPW|WDTHOLD;
+
+	while(1){
+		
+		for(e=0;e<6;e++)		
+		Charlie_On(outs[e], ons[e])x;
+	}
+   return 0;
+}
+-----------------------------------------------------------------------------------------------------
+int main(void){
+
+unsigned int i;
+WDTCTL = WDTPW|WDTHOLD;
+while(1){
+for(i=0; i<0xFFFF; i++){
+
+Charlie_ON(CHPx1 + CHPx2,CHPx1);
+Charlie_ON(CHPx1 + CHPx2,CHPx2);
+
+}
+
+for(i=0; i<0xFFFF; i++){
+
+Charlie_ON(CHPx2 + CHPx3,CHPx2);
+Charlie_ON(CHPx2 + CHPx3,CHPx3);
+
+}
+
+for(i=0; i<0xFFFF; i++){
+
+Charlie_ON(CHPx1 + CHPx3,CHPx1);
+Charlie_ON(CHPx1 + CHPx3,CHPx3);
+
+}
+}
+}
