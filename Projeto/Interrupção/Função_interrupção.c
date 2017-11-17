@@ -1,4 +1,6 @@
-// Canal 0 do TIMER A terá interrupção a cada 100 cycles
+//Quando o registrador de contagem do Timer_A for igual a captura/controle do canal 0 (TACCR0) do registrador do Timer_A vai gerar a interrupção
+
+// Canal 0 do TIMER A terá interrupção a cada 100 ciclos
 // Periodo de contagem da Interrupção: 100 / 1.000.000 = 0.1 ms
 TACCTL0 = CCIE;                           // CCR0 habilitar interrupção
 TACCR0 = 99;
