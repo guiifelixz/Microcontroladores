@@ -16,7 +16,7 @@
 int main ()
 {
     float i=1.9; // i e j = luminosidade natural do local, varia de tipos de LDR, consultar datasheet
-    float j=1.9;
+    float j=1;
     int Valorlido_LDR1;
     int Valorlido_LDR2;
   
@@ -24,17 +24,17 @@ int main ()
 
 // ----------CONFIGURAÇÃO DO TIMERA - PWM ----------
   DCOCTL  = 0;             // Select lowest DCOx and MODx settings
-  BCSCTL1 = CALBC1_8MHZ;    //MCLK e SMCLK pode ser de 1 ou 8 MHZ
-  DCOCTL = CALDCO_8MHZ;   //MCLK e SMCLK pode ser de 1 ou 8MHZ
+  BCSCTL1 = CALBC1_1MHZ;    //MCLK e SMCLK pode ser de 1 ou 8 MHZ
+  DCOCTL = CALDCO_1MHZ;   //MCLK e SMCLK pode ser de 1 ou 8MHZ
   TACTL |= MC_0;
   TA0CCR0 = 62500-1; //10000-1;
   TA0CTL = TASSEL_2 + ID_3 + MC_3 + TAIE; 
 
  // ------ LEDS PARA TESTE ------
-  P1OUT &= ~LED1;  
-  P1DIR |= LED1;
-  P1OUT &= ~LED2;
-  P1DIR |= LED2;
+  P1OUT &= ~LED_TESTE1;  
+  P1DIR |= LED_TESTE1;
+  P1OUT &= ~LED_TESTE2;
+  P1DIR |= LED_TESTE2;
   
  // ------ MOTOR----------------
   P1OUT &= ~MOTOR_R; // MOTOR DIREITO
