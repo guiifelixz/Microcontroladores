@@ -16,7 +16,7 @@
 int main ()
 {
     float i=1.9; // i e j = luminosidade natural do local, varia de tipos de LDR, consultar datasheet
-    float j=1;
+    float j=1.9;
     int Valorlido_LDR1;
     int Valorlido_LDR2;
   
